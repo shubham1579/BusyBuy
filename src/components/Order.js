@@ -27,7 +27,7 @@ function Order(){
 
                         {orders.length > 0 && orders.map((ord, i) => (
                             <div className="mt-8 border-2 p-2 rounded-md" key={i}>
-                                <h2 className="text-xl mb-2 font-medium text-gray-900">Ordered At: {ord.time}</h2>
+                                <h2 className="text-lg mb-2 font-medium text-gray-900">Ordered At: {ord.time}</h2>
                                 <div className="flow-root">
                                     <ul className="-my-6 divide-y divide-gray-200">
                                         {orders[i].order.map((product) => (
