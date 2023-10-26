@@ -32,12 +32,14 @@ const ProductContextProvider = ({children}) => {
 
     const [products, setProducts] = useState([]);
 
+    const [activeCat, setActiveCat] = useState('');
+
     const { userId, isAuthenticated, setIsAuthenticated } = useAuth();
 
     useEffect(() => {
 
         setLoading(true);
-        fetch('https://dummyjson.com/products')
+        fetch('https://dummyjson.com/products?limit=100')
         .then(response => response.json())
         .then((data) => {
             setProducts(data.products);
@@ -46,23 +48,32 @@ const ProductContextProvider = ({children}) => {
 
     }, []);
 
-    const filterCategory = (opt) => {
-        if(opt.checked === false){
-            opt.checked = true;
-            fetch(`https://dummyjson.com/products/category/${opt.value}`)
-            .then(response => response.json())
-            .then((data) => {
-                setProducts(data.products);
-            });
+    const filterCategory = (sec, opt) => {
+        
+        if(sec.id === 'category'){
+            if(opt.value === 'All'){
+                setActiveCat(opt.value);
+                fetch('https://dummyjson.com/products?limit=100')
+                .then(response => response.json())
+                .then((data) => {
+                    setProducts(data.products);
+                });
+            }
+            else{
+                setActiveCat(opt.value);
+                fetch(`https://dummyjson.com/products/category/${opt.value}`)
+                .then(response => response.json())
+                .then((data) => {
+                    setProducts(data.products);
+                });
+            }
         }
-        else{
-            opt.checked = false;
-            fetch('https://dummyjson.com/products')
-            .then(response => response.json())
-            .then((data) => {
-                setProducts(data.products);
-            });
+        else if(sec.id === 'brands'){
+            setActiveCat(opt.value);
+            const filteredBrands = products.filter((prod) => prod.brand === opt.value);
+            setProducts(filteredBrands);
         }
+
     }
 
     useEffect(() => {
@@ -265,7 +276,7 @@ const ProductContextProvider = ({children}) => {
     }
 
     return (
-        <productContext.Provider value={{ products, addToCart, cartItems, handleOrders, orders, isCartEmpty, isPurchased, setIsPurchased, removeFromCart, incCount, decCount, filterCategory, sortProducts, isAuthenticated, ToastContainer, loading, cartLoading, ordersLoading }}>
+        <productContext.Provider value={{ products, addToCart, cartItems, handleOrders, orders, isCartEmpty, isPurchased, setIsPurchased, removeFromCart, incCount, decCount, filterCategory, sortProducts, isAuthenticated, ToastContainer, loading, cartLoading, ordersLoading, activeCat }}>
             {children}
         </productContext.Provider>
     )
