@@ -455,7 +455,7 @@ const override = {
 function Home(){
 
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    const [search, setSearch] = useState('');
+    const [searchProductName, setSearchProductName] = useState('');
     const { products, addToCart, filterCategory, sortProducts, loading, activeCat } = useProductValue();
 
     const { isAuthenticated } = useAuth();
@@ -696,15 +696,16 @@ function Home(){
                                             <div className="mx-auto max-w-2xl px-4 py-1 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8">
                                                 <div className="mt-2 lg:flex justify-end mb-2">
                                                     <input
-                                                        onChange={(e) => setSearch(e.target.value)}
-                                                        placeholder="Search by name"
-                                                        className="max-w-xs block w-full rounded-md border-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                                                      onChange={(e) => setSearchProductName(e.target.value)}
+                                                      placeholder="Search by name"
+                                                      className="max-w-xs block w-full rounded-md border-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                                                     />
                                                 </div>
 
                                                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                                                     {products.filter((item) => {
-                                                        return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
+                                                      const lowercaseSearchProductName = searchProductName.toLowerCase();
+                                                        return lowercaseSearchProductName === '' ? item : item.title.toLowerCase().includes(lowercaseSearchProductName)
                                                     }).map((product) => (
                                                         <div key={product.id} className="group relative border-2 p-2">
                                                             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none hover:opacity-75 lg:h-80">
